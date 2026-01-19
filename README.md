@@ -1,12 +1,12 @@
 # KutuphaneProjesiOdevi
 
-Proje Adı 
+Proje Adı: Kütüphane Sistemi
 
-Proje Amacı 
+Proje Amacı: Kütüphaneler için kullanılabilir bir sistem.
 
-Hedef Kullanıcı Kitlesi 
+Hedef Kullanıcı Kitlesi: Kütüphane İşletmeleri ve kitap okumak isteyen insanlar
 
-Senaryo / Kullanım Amacı 
+Senaryo / Kullanım Amacı: Dileyen herkes bu sistem üzerinden kitap ödünç alabilir. Kütüphane çalışanları bu sistem üzerinden kitaplarını takip edebilir.
 
 Kullanılan Teknolojiler 
 
@@ -16,4 +16,4 @@ Kullanılan Teknolojiler
 
 - SQL Server Express 
 
-- Tanıtım Videosu YouTube Linki
+- Tanıtım Videosu YouTube Linki: 
