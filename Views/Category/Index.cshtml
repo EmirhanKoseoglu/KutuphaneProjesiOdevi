@@ -1,0 +1,28 @@
+@model List<LibraryMS.Models.Category>
+
+<h2>Kategoriler</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <a href="/Category/Create" class="btn btn-primary mb-3">Yeni Kategori Ekle</a>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kategori Adı</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+    <a asp-controller="Book" asp-action="Index" asp-route-categoryId="@item.Id" class="text-decoration-none">
+        @item.Name ➡️
+    </a>
+</td>
+            </tr>
+        }
+    </tbody>
+</table>

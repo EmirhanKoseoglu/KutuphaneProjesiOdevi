@@ -1,0 +1,34 @@
+@model LibraryMS.Models.Book
+
+<h2>Yeni Kitap Ekle</h2>
+
+<form method="post">
+    
+    <div class="mb-3">
+        <label>Kitap Adı</label>
+        <input type="text" name="Title" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+    <label class="control-label">Sayfa Sayısı</label>
+    <input asp-for="PageCount" class="form-control" type="number" min="1" />
+    <span asp-validation-for="PageCount" class="text-danger"></span>
+</div>
+
+    <div class="mb-3">
+        <label>Yazar Seç</label>
+        <select name="AuthorId" class="form-control" asp-items="ViewBag.Authors">
+            <option value="">-- Bir Yazar Seçin --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Kategori Seç</label>
+        <select name="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+            <option value="">-- Bir Kategori Seçin --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="/Book/Index" class="btn btn-secondary">İptal</a>
+</form>

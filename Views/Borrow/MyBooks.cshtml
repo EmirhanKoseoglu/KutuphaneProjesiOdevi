@@ -1,0 +1,109 @@
+@model IEnumerable<LibraryMS.Models.BorrowRecord>
+
+@{
+    ViewData["Title"] = "Kitaplarım";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-primary">
+            <i class="fa-solid fa-book-reader me-2"></i>Ödünç Aldığım Kitaplar
+        </h3>
+        <a asp-controller="Book" asp-action="Index" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-plus me-1"></i> Yeni Kitap Al
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success shadow-sm border-0">
+            <i class="fa-solid fa-check-circle me-2"></i> @TempData["Success"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            
+            @if (Model.Any())
+            {
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="bg-light text-primary border-bottom">
+                        <tr>
+                            <th class="py-3 ps-4">Kitap Adı</th>
+                            <th class="py-3">Alış Tarihi</th>
+                            <th class="py-3">Son Teslim</th>
+                            <th class="py-3">Durum</th>
+                            <th class="py-3 text-end pe-4">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var remainingDays = (item.DueDate - DateTime.Now).Days;
+                            
+                            <tr>
+                                <td class="ps-4 fw-bold">
+                                    <i class="fa-solid fa-book text-muted me-2"></i>
+                                    @item.Book.Title
+                                </td>
+                                
+                                <td>@item.LoanDate.ToShortDateString()</td>
+                                
+                                <td>
+                                    @item.DueDate.ToShortDateString()
+                                </td>
+
+                                <td>
+                                    @if (remainingDays > 3)
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2">
+                                            <i class="fa-solid fa-clock me-1"></i> @remainingDays Gün Kaldı
+                                        </span>
+                                    }
+                                    else if (remainingDays >= 0)
+                                    {
+                                        <span class="badge bg-warning text-dark px-3 py-2">
+                                            <i class="fa-solid fa-triangle-exclamation me-1"></i> Son @remainingDays Gün!
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger px-3 py-2">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i> @Math.Abs(remainingDays) Gün Gecikti
+                                        </span>
+                                    }
+                                </td>
+                                
+                                <td class="text-end pe-4">
+                                    <form asp-action="ReturnBook" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger hover-shadow" 
+                                                onclick="return confirm('Bu kitabı iade etmek istediğinize emin misiniz?');">
+                                            <i class="fa-solid fa-rotate-left me-1"></i> İade Et
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <span class="bg-light p-4 rounded-circle shadow-sm">
+                            <i class="fa-solid fa-box-open fa-3x text-muted"></i>
+                        </span>
+                    </div>
+                    <h5 class="text-muted fw-bold">Şu an elinizde kitap bulunmuyor.</h5>
+                    <p class="text-muted small mb-4">Okumak için yeni bir kitap ödünç alabilirsiniz.</p>
+                    <a asp-controller="Book" asp-action="Index" class="btn btn-primary px-4 shadow-sm">
+                        Kütüphaneye Git
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
