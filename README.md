@@ -16,4 +16,4 @@ Kullanılan Teknolojiler
 
 - SQL Server Express 
 
-- Tanıtım Videosu YouTube Linki: 
+- Tanıtım Videosu YouTube Linki: https://youtu.be/GU22f9qkBFc
