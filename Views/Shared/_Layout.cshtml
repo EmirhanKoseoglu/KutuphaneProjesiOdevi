@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibraryMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="fa-solid fa-book-open-reader me-2"></i>Library<b>MS</b>
+            </div>
+            
+            <div class="list-group list-group-flush mt-3">
+                <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action">
+                    <i class="fa-solid fa-house"></i> Ana Sayfa
+                </a>
+
+                <a asp-controller="Book" asp-action="Index" class="list-group-item list-group-item-action">
+                    <i class="fa-solid fa-book"></i> Kitaplar
+                </a>
+
+                <a asp-controller="Author" asp-action="Index" class="list-group-item list-group-item-action">
+                    <i class="fa-solid fa-pen-nib"></i> Yazarlar
+                </a>
+                <a asp-controller="Category" asp-action="Index" class="list-group-item list-group-item-action">
+                     <i class="fa-solid fa-layer-group me-1"></i> Kategoriler
+                </a>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Borrow" asp-action="MyBooks" class="list-group-item list-group-item-action">
+                        <i class="fa-solid fa-bookmark"></i> Kitaplarım
+                    </a>
+                }
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mt-4 mb-2 ps-4 text-white-50 text-uppercase" style="font-size: 0.8rem;">Yönetim</div>
+                    
+                    <a asp-controller="Admin" asp-action="Index" class="list-group-item list-group-item-action">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                    <a asp-controller="Admin" asp-action="OverdueBooks" class="list-group-item list-group-item-action">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Geciken İadeler
+                    </a>
+                    <a asp-controller="Admin" asp-action="Orders" class="list-group-item list-group-item-action">
+                        <i class="fa-solid fa-truck-ramp-box"></i> Siparişler
+                    </a>
+                }
+            </div>
+
+            <div class="sidebar-footer">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="d-flex align-items-center text-white mb-2">
+                        <i class="fa-solid fa-user-circle fa-2x me-2"></i>
+                        <small>@User.Identity.Name</small>
+                    </div>
+                    <form class="d-grid" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="btn btn-outline-light btn-sm">
+                            <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-light text-primary fw-bold btn-sm">Giriş Yap</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-sm">Kayıt Ol</a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger shadow-sm border-0 alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i> @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success shadow-sm border-0 alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-check-circle me-2"></i> @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @RenderBody()
+            </div>
+        </div>
+        </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

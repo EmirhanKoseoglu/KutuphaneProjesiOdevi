@@ -1,0 +1,55 @@
+@model List<LibraryMS.Models.OverdueInfo>
+
+@{
+    ViewData["Title"] = "Geciken Kitaplar";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-danger">🚨 Geciken Kitaplar Listesi</h2>
+        <a asp-action="Index" class="btn btn-secondary">← Panele Dön</a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-success">Harika! Şu an geciken hiç kitap yok. 🎉</div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Kitap Adı</th>
+                    <th>Üye (E-Posta)</th>
+                    <th>Son Teslim Tarihi</th>
+                    <th>Gecikme Süresi</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.BookTitle</td>
+                        <td>
+                            <a href="mailto:@item.MemberEmail">@item.MemberEmail</a>
+                        </td>
+                        <td>@item.DueDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-danger">@item.OverdueDays Gün Gecikti</span>
+                        </td>
+                        <td>
+                            <form asp-controller="Borrow" asp-action="ReturnBook" method="post">
+                                <input type="hidden" name="id" value="@item.RecordId" />
+                                <button type="submit" class="btn btn-warning btn-sm" 
+                                        onclick="return confirm('Bu kitabı iade almak istediğinize emin misiniz?');">
+                                    Admin Olarak İade Al
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

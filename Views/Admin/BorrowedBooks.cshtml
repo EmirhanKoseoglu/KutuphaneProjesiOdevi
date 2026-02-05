@@ -1,0 +1,83 @@
+@model List<LibraryMS.Models.TransactionInfo>
+
+@{
+    ViewData["Title"] = "Ödünç Verilen Kitaplar";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0" style="color: var(--primary-color);">
+                <i class="fa-solid fa-book-reader me-2"></i>Ödünç Verilen Kitaplar
+            </h2>
+            <p class="text-muted">Şu an üyelerde bulunan tüm kitapların listesi</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-2"></i>Panele Dön
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary">
+                        <tr>
+                            <th class="ps-4">Üye</th>
+                            <th>Kitap</th>
+                            <th>Ödünç Tarihi</th>
+                            <th>Son Teslim</th>
+                            <th>Durum</th>
+                            <th class="text-end pe-4">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold">@item.MemberName</td>
+                                    <td>@item.BookTitle</td>
+                                    <td>@item.LoanDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@item.DueDate.ToString("dd.MM.yyyy")</td>
+                                    <td>
+                                        @if (item.Status == "Gecikmiş")
+                                        {
+                                            <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">Gecikmiş</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Okunuyor</span>
+                                        }
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <form asp-controller="Borrow" asp-action="ReturnBook" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="returnUrl" value="/Admin/BorrowedBooks" />
+                                            <button type="submit" class="btn btn-sm btn-outline-success hover-shadow" 
+                                                    onclick="return confirm('Bu kitabı iade almak istediğinize emin misiniz?');">
+                                                <i class="fa-solid fa-check me-1"></i> İade Al
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-inbox fa-2x mb-2 opacity-50"></i>
+                                    <p class="mb-0">Şu an ödünç verilmiş kitap bulunmuyor.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

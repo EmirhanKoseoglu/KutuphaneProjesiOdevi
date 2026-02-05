@@ -1,0 +1,188 @@
+
+
+@model LibraryMS.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Yönetici Paneli";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0" style="color: var(--primary-color);">
+                <i class="fa-solid fa-chart-line me-2"></i>Yönetici Paneli
+            </h2>
+            <p class="text-muted">Kütüphane durumunu ve istatistikleri görüntüleyin</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-light text-primary border px-3 py-2">
+                <i class="fa-regular fa-calendar me-2"></i>@DateTime.Now.ToString("dd MMMM yyyy")
+            </span>
+        </div>
+    </div>
+
+    <!-- İstatistik Kartları -->
+    <div class="row g-4 mb-5">
+        
+        <!-- Toplam Kitap -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 ps-2" style="border-left: 4px solid var(--primary-color) !important;">
+                <div class="card-body d-flex align-items-center">
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(44, 62, 80, 0.1);">
+                        <i class="fa-solid fa-book fa-2x" style="color: var(--primary-color);"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Toplam Kitap</h6>
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TotalBooks</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yazarlar -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 ps-2" style="border-left: 4px solid var(--secondary-color) !important;">
+                <div class="card-body d-flex align-items-center">
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(197, 160, 89, 0.1);">
+                        <i class="fa-solid fa-pen-nib fa-2x" style="color: var(--secondary-color);"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Yazarlar</h6>
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TotalAuthors</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aktif Ödünç -->
+        <div class="col-md-3">
+            <a asp-action="BorrowedBooks" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 ps-2 hover-card" style="border-left: 4px solid var(--accent-color) !important;">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="p-3 rounded-circle me-3" style="background-color: rgba(230, 126, 34, 0.1);">
+                            <i class="fa-solid fa-book-reader fa-2x" style="color: var(--accent-color);"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1 text-uppercase small ls-1">Okunan Kitaplar</h6>
+                            <h2 class="fw-bold mb-0 text-dark">@Model.ActiveLoans</h2>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Kategoriler -->
+        <div class="col-md-3">
+             <div class="card border-0 shadow-sm h-100 ps-2" style="border-left: 4px solid #16a085 !important;">
+                <div class="card-body d-flex align-items-center">
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(22, 160, 133, 0.1);">
+                        <i class="fa-solid fa-layer-group fa-2x" style="color: #16a085;"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Kategoriler</h6>
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TotalCategories</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Son İşlemler Tablosu -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0" style="color: var(--primary-color);">
+                        <i class="fa-solid fa-clock-rotate-left me-2"></i>Son İşlemler
+                    </h5>
+                    <a asp-action="BorrowedBooks" class="btn btn-sm btn-outline-primary rounded-pill px-3">Tümünü Gör</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-secondary">
+                            <tr>
+                                <th class="ps-4 border-0">Üye</th>
+                                <th class="border-0">Kitap</th>
+                                <th class="border-0">Tarih</th>
+                                <th class="border-0 text-center">Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            @if(Model.RecentTransactions != null && Model.RecentTransactions.Any())
+                            {
+                                @foreach (var item in Model.RecentTransactions)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                                                    <i class="fa-solid fa-user text-muted small"></i>
+                                                </div>
+                                                <span class="fw-bold text-dark">@item.MemberName</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">@item.BookTitle</td>
+                                        <td>
+                                            <div class="small text-muted"><i class="fa-regular fa-calendar me-1"></i> @item.LoanDate.ToString("dd.MM.yyyy")</div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if(item.Status == "Gecikmiş")
+                                            {
+                                                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">Gecikmiş</span>
+                                            }
+                                            else if(item.Status == "İade Edildi")
+                                            {
+                                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Tamamlandı</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Okunuyor</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="fa-solid fa-inbox fa-2x mb-2 opacity-50"></i>
+                                        <p class="mb-0">Henüz işlem kaydı bulunmamaktadır.</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Geciken İadeler (Özet) -->
+        <div class="col-lg-4 mt-4 mt-lg-0">
+             <div class="card border-0 shadow-sm h-100 bg-white">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <div class="mb-3 mx-auto p-4 rounded-circle bg-danger bg-opacity-10" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-triangle-exclamation fa-3x text-danger"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-1">@Model.OverdueBooks</h2>
+                    <p class="text-muted mb-4">Geciken İade Bulunuyor</p>
+                    
+                    @if(Model.OverdueBooks > 0)
+                    {
+                        <a asp-action="OverdueBooks" class="btn btn-danger btn-lg w-100 rounded-pill fw-bold shadow-sm">
+                            <i class="fa-solid fa-list-check me-2"></i> Listeyi İncele
+                        </a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-light w-100 rounded-pill text-muted" disabled>
+                            <i class="fa-solid fa-check me-2"></i> Her Şey Yolunda
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

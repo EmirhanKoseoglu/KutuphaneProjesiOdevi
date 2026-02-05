@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="row mb-5 align-items-center">
+    <div class="col-lg-7">
+        <h1 class="display-4 fw-bold mb-3" style="font-family: 'Playfair Display', serif; color: var(--primary-color);">
+            Kütüphanene Hoş Geldin <i class="fa-solid fa-book-open ms-2 text-warning"></i>
+        </h1>
+        <p class="lead fs-5 text-muted mb-4" style="line-height: 1.8;">
+            Bilginin sessiz limanına adım atın. Binlerce kitap, yüzlerce yazar ve sınırsız bir keşif dünyası sizi bekliyor.
+        </p>
+        
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="d-flex gap-3">
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg px-5 shadow-sm" style="border-radius: 50px;">
+                    Giriş Yap
+                </a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-dark btn-lg px-5" style="border-radius: 50px;">
+                    Kayıt Ol
+                </a>
+            </div>
+        }
+        else
+        {
+             <a asp-controller="Book" asp-action="Index" class="btn btn-primary btn-lg px-5 shadow-sm" style="border-radius: 50px;">
+                Kitapları Keşfet <i class="fa-solid fa-arrow-right ms-2"></i>
+            </a>
+        }
+    </div>
+    <div class="col-lg-5 d-none d-lg-block text-center">
+        <!-- Optional: Add an illustration or keep it clean -->
+        <i class="fa-solid fa-book-reader fa-10x" style="color: var(--secondary-color); opacity: 0.2;"></i>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    
+    <div class="col-md-4">
+        <div class="card border-0 h-100 py-3 ps-3">
+            <div class="card-body d-flex align-items-center">
+                <div class="p-3 rounded-circle me-3" style="background-color: rgba(44, 62, 80, 0.1);">
+                    <i class="fa-solid fa-book fa-2x" style="color: var(--primary-color);"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1 text-uppercase small ls-1">Kütüphane Arşivi</h6>
+                    <h2 class="fw-bold mb-0" style="color: var(--primary-color);">@ViewBag.BookCount <span class="fs-6 fw-normal text-muted">Kitap</span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 h-100 py-3 ps-3">
+            <div class="card-body d-flex align-items-center">
+                <div class="p-3 rounded-circle me-3" style="background-color: rgba(197, 160, 89, 0.1);">
+                    <i class="fa-solid fa-pen-nib fa-2x" style="color: var(--secondary-color);"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-1 text-uppercase small ls-1">Yazarlar</h6>
+                    <h2 class="fw-bold mb-0" style="color: var(--primary-color);">@ViewBag.AuthorCount <span class="fs-6 fw-normal text-muted">Yazar</span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 h-100 py-3 ps-3">
+            <div class="card-body d-flex align-items-center">
+                
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(230, 126, 34, 0.1);">
+                        <i class="fa-solid fa-users fa-2x" style="color: var(--accent-color);"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Kayıtlı Üyeler</h6>
+                        <h2 class="fw-bold mb-0" style="color: var(--primary-color);">@ViewBag.MemberCount</h2>
+                    </div>
+                }
+                else if (User.Identity.IsAuthenticated)
+                {
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(44, 62, 80, 0.1);">
+                        <i class="fa-solid fa-bookmark fa-2x" style="color: var(--primary-color);"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Okuduğun Kitaplar</h6>
+                        <h2 class="fw-bold mb-0" style="color: var(--primary-color);">@ViewBag.MyBooksCount</h2>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-3 rounded-circle me-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                        <i class="fa-solid fa-clock fa-2x text-secondary"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1 text-uppercase small ls-1">Çalışma Saatleri</h6>
+                        <h5 class="fw-bold mb-0" style="color: var(--primary-color);">09:00 - 18:00</h5>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card border-0 h-100">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                <i class="fa-solid fa-star me-2" style="color: var(--secondary-color);"></i> Neden Biz?
+            </div>
+            <div class="card-body px-4">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0 px-0 d-flex align-items-center">
+                        <i class="fa-solid fa-check-circle me-3" style="color: var(--success);"></i> 
+                        <span>Binlerce ücretsiz akademik ve edebi kaynak</span>
+                    </li>
+                    <li class="list-group-item border-0 px-0 d-flex align-items-center">
+                        <i class="fa-solid fa-check-circle me-3" style="color: var(--success);"></i> 
+                        <span>15 gün ödünç alma süresi ve kolay uzatma</span>
+                    </li>
+                    <li class="list-group-item border-0 px-0 d-flex align-items-center">
+                        <i class="fa-solid fa-check-circle me-3" style="color: var(--success);"></i> 
+                        <span>Online takip ve rezervasyon sistemi</span>
+                    </li>
+                    <li class="list-group-item border-0 px-0 d-flex align-items-center">
+                        <i class="fa-solid fa-check-circle me-3" style="color: var(--success);"></i> 
+                        <span>Sessiz ve konforlu çalışma ortamı</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card border-0 h-100 text-white" style="background-color: var(--primary-color);">
+            <div class="card-body p-5 text-center d-flex flex-column justify-content-center">
+                <h3 class="mb-3" style="font-family: 'Playfair Display', serif; color: var(--secondary-color);">Aradığınızı Bulamadınız mı?</h3>
+                <p class="mb-4 text-white-50">Kütüphane koleksiyonumuzda görmek istediğiniz eserleri bize bildirin.</p>
+                <a href="mailto:admin@kutuphane.com" class="btn btn-secondary fw-bold px-4" style="border-radius: 50px;">
+                    <i class="fa-solid fa-envelope me-2"></i> Talep Oluştur
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

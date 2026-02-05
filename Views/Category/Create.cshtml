@@ -1,0 +1,13 @@
+@model LibraryMS.Models.Category
+
+<h2>Yeni Kategori Ekle</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Kategori Adı</label>
+        <input type="text" name="Name" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="/Category/Index" class="btn btn-secondary">İptal</a>
+</form>

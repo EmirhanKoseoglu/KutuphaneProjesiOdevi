@@ -1,0 +1,117 @@
+@model IEnumerable<LibraryMS.Models.Author>
+
+@{
+    ViewData["Title"] = "Yazar Listesi";
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-4 align-items-center">
+        
+        <div class="col-md-3">
+            <h3 class="fw-bold text-success mb-0">
+                <i class="fa-solid fa-pen-nib me-2"></i>Yazarlar
+            </h3>
+        </div>
+
+        <div class="col-md-6">
+            <form asp-controller="Author" asp-action="Index" method="get">
+                <div class="input-group shadow-sm">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                    </span>
+                    <input type="text" name="searchString" class="form-control border-start-0 ps-0 py-2" 
+                           placeholder="Yazar adı veya soyadı ara..." 
+                           value="@ViewData["CurrentFilter"]">
+                    <button class="btn btn-success px-4 fw-bold" type="submit">ARA</button>
+                    
+                    @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary" title="Temizle">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    }
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3 text-end">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" class="btn btn-primary py-2 shadow-sm">
+                    <i class="fa-solid fa-plus-circle me-1"></i> Yeni Yazar
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0 align-middle">
+                <thead class="bg-light text-success border-bottom">
+                    <tr>
+                        <th class="py-3 ps-4" style="width: 100px;">Fotoğraf</th>
+                        <th class="py-3">Yazar Bilgisi</th>
+                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <th class="py-3 text-end pe-4">İşlemler</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                {
+                                    <img src="~/images/@item.ImageUrl" class="rounded-circle border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center border" style="width: 60px; height: 60px;">
+                                        <i class="fa-solid fa-user text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <a asp-controller="Book" asp-action="Index" asp-route-authorId="@item.Id" class="fw-bold text-decoration-none text-dark hover-text-primary mb-1" style="font-size: 1.1rem;">
+                                        @item.Name <i class="fa-solid fa-arrow-up-right-from-square ms-1 small text-muted"></i>
+                                    </a>
+                                    @if (!string.IsNullOrEmpty(item.Bio))
+                                    {
+                                        <small class="text-muted">@item.Bio</small>
+                                    }
+                                </div>
+                            </td>
+                            
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Düzenle">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Sil">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted">
+                    <i class="fa-solid fa-user-slash fa-3x mb-3"></i>
+                    <p>Listelenecek yazar bulunamadı.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

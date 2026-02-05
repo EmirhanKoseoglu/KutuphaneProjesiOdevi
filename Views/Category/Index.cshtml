@@ -1,0 +1,90 @@
+@model List<LibraryMS.Models.Category>
+
+@{
+    ViewData["Title"] = "Kategoriler";
+}
+
+@functions {
+    public string GetPluralName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return name;
+
+        // Zaten çoğul eki almışsa dokunma (basit kontrol)
+        if (name.EndsWith("lar") || name.EndsWith("ler")) return name;
+
+        string kalinUnluler = "aıouAIOU";
+        string inceUnluler = "eiöüEİÖÜ";
+        
+        // Sondan başa doğru ilk sesli harfi bul
+        for (int i = name.Length - 1; i >= 0; i--)
+        {
+            if (kalinUnluler.Contains(name[i])) return name + "lar";
+            if (inceUnluler.Contains(name[i])) return name + "ler";
+        }
+
+        // Varsayılan
+        return name + "ler";
+    }
+}
+
+<div class="container-fluid">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-9">
+            <h3 class="fw-bold fs-3" style="color: var(--primary-color);">
+                <i class="fa-solid fa-layer-group me-2"></i>Kategoriler
+            </h3>
+            <p class="text-muted">Kütüphanemizdeki kitapları türlerine göre keşfedin</p>
+        </div>
+        <div class="col-md-3 text-end">
+             @if (User.IsInRole("Admin"))
+             {
+                 <a href="/Category/Create" class="btn btn-primary shadow-sm">
+                     <i class="fa-solid fa-plus-circle me-1"></i> Yeni Kategori
+                 </a>
+             }
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <div class="mb-3">
+                <i class="fa-solid fa-folder-open fa-3x text-muted opacity-50"></i>
+            </div>
+            <h4 class="text-muted fw-normal">Henüz kategori bulunmuyor.</h4>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 col-lg-3">
+                    <a asp-controller="Book" asp-action="Index" asp-route-categoryId="@item.Id" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm hover-card" style="transition: all 0.3s;">
+                            <div class="card-body p-4 text-center">
+                                <div class="mb-3 rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 60px; height: 60px; background-color: rgba(197, 160, 89, 0.1);">
+                                    <i class="fa-solid fa-book-bookmark fa-xl" style="color: var(--secondary-color);"></i>
+                                </div>
+                                <h5 class="fw-bold mb-1 text-dark">@GetPluralName(item.Name)</h5>
+                                <span class="small text-muted">İncelemek için tıklayın</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        background-color: var(--white);
+    }
+    .hover-card:hover h5 {
+        color: var(--primary-color) !important;
+    }
+</style>

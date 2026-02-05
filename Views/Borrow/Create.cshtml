@@ -1,0 +1,79 @@
+@model LibraryMS.Models.Book
+@{
+    ViewData["Title"] = "Kitap Ödünç Al";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h3 class="mb-0"><i class="fa-solid fa-truck-fast me-2"></i>Eve Teslim Kitap Ödünç Al</h3>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <div class="d-flex align-items-center mb-4 p-3 bg-light rounded">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="~/images/@Model.ImageUrl" class="img-thumbnail me-3" style="height: 100px; width: 80px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="bg-secondary d-flex align-items-center justify-content-center text-white rounded me-3" style="height: 100px; width: 80px;">
+                                <i class="fa-solid fa-book fa-2x"></i>
+                            </div>
+                        }
+                        <div>
+                            <h5 class="fw-bold mb-1">@Model.Title</h5>
+                            <p class="mb-0 text-muted">Yazar: @(Model.Author?.Name ?? "Belirtilmemiş")</p>
+                        </div>
+                    </div>
+
+                    <form asp-action="CreateConfirmed" method="post">
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+                        
+                        <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Teslimat Bilgileri</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Adınız</label>
+                                <input type="text" name="firstName" class="form-control" required placeholder="Adınız" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Soyadınız</label>
+                                <input type="text" name="lastName" class="form-control" required placeholder="Soyadınız" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Telefon Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                <input type="tel" name="phoneNumber" class="form-control" required placeholder="05XX XXX XX XX" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Teslimat Adresi</label>
+                            <textarea name="address" class="form-control" rows="3" required placeholder="Açık adresinizi giriniz..."></textarea>
+                        </div>
+
+                        <div class="alert alert-info mt-4">
+                            <i class="fa-solid fa-info-circle me-2"></i>
+                            Kitabınız belirtilen adrese kargo ile gönderilecektir. Teslimat süresi ortalama 2-3 iş günüdür.
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                <i class="fa-solid fa-check-circle me-2"></i> Siparişi Onayla
+                            </button>
+                            <a asp-controller="Book" asp-action="Index" class="btn btn-outline-secondary">
+                                İptal Et
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

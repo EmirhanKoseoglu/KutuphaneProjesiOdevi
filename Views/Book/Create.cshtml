@@ -1,0 +1,56 @@
+@model LibraryMS.Models.Book
+
+<h2>Yeni Kitap Ekle</h2>
+
+<form method="post" enctype="multipart/form-data">
+    
+    <div class="mb-3">
+        <label>Kitap Adı</label>
+        <input type="text" name="Title" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Açıklama</label>
+        <textarea name="Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Sayfa Sayısı</label>
+        <input asp-for="PageCount" class="form-control" type="number" min="1" />
+        <span asp-validation-for="PageCount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label fw-bold">Fiyat</label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label fw-bold">Stok Adedi</label>
+        <input asp-for="Stock" class="form-control" type="number" min="0" value="1" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Kitap Kapağı</label>
+        <input asp-for="ImageUpload" type="file" class="form-control" accept="image/*" />
+    </div>
+
+    <div class="mb-3">
+        <label>Yazar Seç</label>
+        <select name="AuthorId" class="form-control" asp-items="ViewBag.Authors">
+            <option value="">-- Bir Yazar Seçin --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Kategori Seç</label>
+        <select name="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+            <option value="">-- Bir Kategori Seçin --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="/Book/Index" class="btn btn-secondary">İptal</a>
+</form>
