@@ -2,11 +2,11 @@
 
 Proje Adı: Kütüphane Sistemi
 
-Proje Amacı: Kütüphaneler için kullanılabilir bir sistem.
+Proje Amacı: Kitap severleri efor sarf etmeden istedikleri adreste kitapla buluşturmak.
 
-Hedef Kullanıcı Kitlesi: Kütüphane İşletmeleri ve kitap okumak isteyen insanlar
+Hedef Kullanıcı Kitlesi: Kütüphane İşletmeleri ve kitap okumak isteyenler.
 
-Senaryo / Kullanım Amacı: Dileyen herkes bu sistem üzerinden kitap ödünç alabilir. Kütüphane çalışanları bu sistem üzerinden kitaplarını takip edebilir.
+Senaryo / Kullanım Amacı: Site üzerinden kayıtlı kullanıcların kitap sipariş edebilmesi. Ödünç aldıkları kitapları geri vermeme durumunda kütüphanenin o kişilerle kolayca iletişime geçebilmesi.
 
 Kullanılan Teknolojiler 
 
